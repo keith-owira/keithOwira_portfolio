@@ -74,15 +74,12 @@
          </div>
         
          <!--Tech Stack Section-->
-
-    <div class="text-center mt4"  style="padding-top: 10px;">
-          <h2>TechStack</h2>
-          <div style="width:120px;margin:0 auto;">
-            <v-slider color="yellow"></v-slider>
+      <div>
+          <h2 class="text-center mt4"  style="padding-top: 20px;" id="stack">TechStack</h2>
+          <div style="width:120px;margin: auto;">
+            <v-slider  v-model="slider2" color="yellow"></v-slider>
           </div>
-      </div>
-          <v-col cols="12" class="padd" id="stack">
-            
+          <v-col cols="12" class="padd">
         <v-carousel :cycle="true"  :show-arrows="false" hide-delimiters>
           <v-carousel-item style="background-color: white; height: 200px"
               class="pb-0 mb-0">
@@ -92,10 +89,12 @@
                   <div class="child">
                     <v-btn icon="fas fa-laptop-code" color="#FBDF7E" class="text-white"></v-btn>
                     <h3 class="ml-3 mt-4">Web Technologies</h3>
-                    <p class="text-grey ml-3 mt-4 text-caption">
-                      Backend -> Laravel , Slim and Sprinboot
-                      <br /> Frontend-> Angular and Vue Js,
-                      <br/> Scriping -> Node
+                    <p class="text-black ml-3 mt-4 text-caption">
+                      <ul  style=" list-style-type: none;">
+                        <li >Backend > Laravel, Slim and Springboot</li>
+                        <li>Frontend > Angular and Vue</li>
+                        <li>Scripting > Node </li>
+                      </ul>
                     </p>
                   </div>
                 </v-col>
@@ -110,10 +109,12 @@
                   <div class="child">
                     <v-btn icon="fas fa-code" color="#FBDF7E" class="text-white"></v-btn>
                     <h3 class="ml-3 mt-4">Languages</h3>
-                    <p class="text-grey ml-3 mt-4 text-caption">
-                      Backend -> Php
-                      <br /> Frontend -> Javascript , GoLang                    
-                      <br/> Java .NET
+                    <p class="text-black ml-3 mt-4 text-caption">
+                      <ul style=" list-style-type: none;">
+                        <li >Backend > PHP, Javascript Java</li>
+                        <li>Frontend > Javascript , Go Lang</li>
+                        <li>Fundamentals > Java .Net</li>
+                      </ul>
                     </p>
                   </div>
                 </v-col>
@@ -128,10 +129,12 @@
                   <div class="child">
                     <v-btn icon="fas fa-database" color="#FBDF7E" class="text-white"></v-btn>
                     <h3 class="ml-3 mt-4">Databases</h3>
-                    <p class="text-grey ml-3 mt-4 text-caption">
-                      Relational -> Mysql
-                      <br /> Nosql ->Mongo DB
-                      <br/> Oracle SQL
+                    <p class="text-black ml-3 mt-4 text-caption">
+                      <ul style=" list-style-type: none;">
+                        <li >Relational > Mysql</li>
+                        <li>Non-Relational > MongoDB</li>
+                        <li>Oracle Sql</li>
+                      </ul>
                     </p>
                   </div>
                 </v-col>
@@ -140,6 +143,7 @@
           </v-carousel-item>
         </v-carousel>
         </v-col>
+      </div>
       </v-col>
       <v-col cols="12" id="portfolio" width="100%">
     <div class="pre" id="portfolio">
@@ -314,14 +318,14 @@
             </span>
             <v-row class="mt-10">
               <v-col cols="12" sm="6">
-                <v-text-field label="Name" persistent-hint variant="outlined"></v-text-field>
+                <v-text-field v-model="email" label="Email" persistent-hint variant="outlined"></v-text-field>
               </v-col>
               <v-col cols="12" sm="6">
-                <v-text-field label="Phone Number" persistent-hint variant="outlined"></v-text-field>
+                <v-text-field v-model="phoneNumber" label="Phone Number" persistent-hint variant="outlined"></v-text-field>
               </v-col>
             </v-row>
-                <v-textarea label="Message" persistent-hint variant="outlined"></v-textarea>
-                <v-btn color="#FBDF7E" class="mt-2">Submit Now</v-btn>
+                <v-textarea v-model="message" label="Message" persistent-hint variant="outlined"></v-textarea>
+                <v-btn color="#FBDF7E" class="mt-2" @click="sendEmail" >Submit Now</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -340,7 +344,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-
+import emailjs from 'emailjs-com' 
 // Components
 import NavBar from '../components/NavBar.vue';
 import FooterView from '../components/FooterView.vue';
@@ -390,7 +394,13 @@ export default defineComponent({
       ],
     }
   },
-
+data(){
+  return{
+      email: '',
+      phoneNumber: '',
+      message: '',
+  }
+},
   components: {
     NavBar,
     FooterView
@@ -403,10 +413,62 @@ export default defineComponent({
         element.scrollIntoView({ behavior: 'smooth' });
       }
     });
-  },redirectToWhatsApp() {
+  },  
+  redirectToWhatsApp() {
       const phoneNumber = "+254769728089";
       window.location.href = `https://wa.me/${phoneNumber}`;
-    }
+    },
+    async sendEmail() {
+      try { const templateParams = {
+      from_name: this.email,
+      to_name: this.phoneNumber,
+      message: this.message,
+    };
+    console.log(templateParams);
+
+      const response = await emailjs.send(
+        'service_osvrwgn',
+        'template_6ri5aqr',
+        templateParams,
+        'Jtyyj55592n2SwrqR'
+      );
+        // const response = await emailjs.sendForm('service_osvrwgn', 'template_j8baxi9', e.target,
+        // 'Jtyyj55592n2SwrqR', {
+        //   email: this.email,
+        //   phoneNumber: this.phoneNumber,
+        //   message: this.message
+        // })
+
+        console.log("Email :",response);
+
+
+      } catch(error) {
+          console.log({error})
+      }
+      // Reset form field
+      this.email = ''
+      this.phoneNumber = ''
+      this.message = ''
+    },
+    // sendEmail() {
+    //   const templateParams = {
+    //     email: this.email,
+    //     phoneNumber: this.phoneNumber,
+    //     message: this.message,
+    //   };
+
+    //   emailjs
+    //     .sendForm("service_osvrwgn", "template_j8baxi9", templateParams, "Jtyyj55592n2SwrqR")
+    //     .then(
+    //       (result) => {
+    //         console.log("You have successfully submitted your message", result.text);
+    //       },
+    //       (error) => {
+    //         console.log("This form failed to submit, please kindly check your internet connection", error.text);
+    //       }
+    //     );
+    // },
+
   },
 });
 </script>
@@ -516,6 +578,10 @@ export default defineComponent({
     }
     .padd{
       height: 300px;
+      margin-bottom: 50px; /* Adjust as needed */
+       padding-bottom: 20px; 
+       padding-top: 50px;
+
     }
     .pre{
 
