@@ -432,16 +432,9 @@ data(){
         templateParams,
         'Jtyyj55592n2SwrqR'
       );
-        // const response = await emailjs.sendForm('service_osvrwgn', 'template_j8baxi9', e.target,
-        // 'Jtyyj55592n2SwrqR', {
-        //   email: this.email,
-        //   phoneNumber: this.phoneNumber,
-        //   message: this.message
-        // })
-
+  
         console.log("Email :",response);
-
-
+        window.alert('Your Message has been sent successfully!');
       } catch(error) {
           console.log({error})
       }
